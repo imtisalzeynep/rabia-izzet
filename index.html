@@ -1303,7 +1303,7 @@ function petals(count=8){
 }
 setInterval(()=>petals(3),6800);
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMGh8pZFx2feskIhlSowZKWdkcVQcdM7kQWoDBkTzWKFDNdoVJbSLS1rzcb-SPXH4Gxw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMt1nLmWnmH-JXBaDlDMdugh1p5-hjbsUfZGeiMxyOo4UFMfhZoVgtZqhgS9RXNWyu/exec";
 
 async function sendRSVP(event){
   event.preventDefault();
@@ -1325,12 +1325,14 @@ async function sendRSVP(event){
   formStatus.textContent = "";
 
   try{
-    await fetch(GOOGLE_SCRIPT_URL, {
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
-      mode: "no-cors",
-      headers: {"Content-Type":"application/json"},
+      headers: {"Content-Type":"text/plain;charset=UTF-8"},
       body: JSON.stringify(data)
     });
+    if (!response.ok || (await response.text()).trim() !== "OK") {
+      throw new Error("Kayıt doğrulanamadı.");
+    }
     form.reset();
     button.textContent = "Kaydedildi ✓";
     formStatus.textContent = "Katılım durumunuz kaydedildi. Teşekkür ederiz.";
